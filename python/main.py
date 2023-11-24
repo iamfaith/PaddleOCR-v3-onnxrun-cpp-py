@@ -10,7 +10,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = 'TRUE'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--imgpath', type=str, default='python/images/B5PQ23.png', help="image path")
+    parser.add_argument('--imgpath', type=str, default='python/images/5.jpg', help="image path")
     args = parser.parse_args()
 
     detect_model = TextDetector()

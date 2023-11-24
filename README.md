@@ -59,6 +59,13 @@ paddle2onnx --model_dir inference_model --model_filename ppocrv3_rec.pdmodel --p
  paddle2onnx --model_dir inference_model --model_filename ppocrv3_det.pdmodel --params_filename ppocrv3_det.pdiparams --save_file ppocrv3_det.onnx --opset_version 11 --enable_onnx_checker True
 
 
+paddle2onnx --model_dir inference_model --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file ppocrv4_rec.onnx --opset_version 11 --enable_onnx_checker True
+
+
+paddle2onnx --model_dir inference_model --model_filename inference.pdmodel --params_filename inference.pdiparams --save_file ppocrv4_det.onnx --opset_version 11 --enable_onnx_checker True
+
+
+
 '/home/faith/.paddlehub/modules/ch_pp_ocrv3_det/inference_model/ppocrv3_det.pdmodel'
 
 

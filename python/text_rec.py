@@ -48,8 +48,11 @@ class strLabelConverter(object):
 
 class TextRecognizer:
     def __init__(self):
-        # self.sess = onnxruntime.InferenceSession('weights/ch_PP-OCRv3_rec_infer.onnx')
-        self.sess = onnxruntime.InferenceSession('python/weights/ch_PP-OCRv3_rec.onnx')
+        # self.sess = onnxruntime.InferenceSession('python/weights/ch_PP-OCRv3_rec_infer.onnx') # old
+        # self.sess = onnxruntime.InferenceSession('python/weights/ch_PP-OCRv3_rec.onnx')
+        # self.sess = onnxruntime.InferenceSession('python/weights/ppocrv4_rec.onnx', providers = ['CUDAExecutionProvider', 'CPUExecutionProvider'])
+        self.sess = onnxruntime.InferenceSession('python/weights/ppocrv4_rec.onnx')
+        # self.sess = onnxruntime.InferenceSession('python/weights/ppocrv4_rec_slim.onnx')
         self.alphabet = list(map(lambda x:x.decode('utf-8').strip("\n").strip("\r\n"), open('python/rec_word_dict.txt', 'rb').readlines()))
         self.converter = strLabelConverter(''.join(self.alphabet))
         self.rec_image_shape = [3, 48, 320]

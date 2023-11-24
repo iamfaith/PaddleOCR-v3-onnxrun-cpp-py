@@ -147,7 +147,11 @@ class TextDetector():
         # so.log_severity_level = 3
         # self.session = onnxruntime.InferenceSession('python/weights/ch_PP-OCRv3_det_infer.onnx', so)
 
-        self.session = onnxruntime.InferenceSession('python/weights/ppocrv3_det.onnx')
+        # self.session = onnxruntime.InferenceSession('python/weights/ppocrv3_det.onnx')
+        self.session = onnxruntime.InferenceSession('python/weights/ppocrv4_det.onnx')
+        # self.session = onnxruntime.InferenceSession('python/weights/ppocrv4_det_server.onnx') # not working
+        
+        
         
         # self.input_size = (736, 736)  ###width, height
         # self.short_size = 736
