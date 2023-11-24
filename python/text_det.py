@@ -145,7 +145,7 @@ class TextDetector():
     def __init__(self):
         so = onnxruntime.SessionOptions()
         so.log_severity_level = 3
-        self.session = onnxruntime.InferenceSession('weights/ch_PP-OCRv3_det_infer.onnx', so)
+        self.session = onnxruntime.InferenceSession('python/weights/ch_PP-OCRv3_det_infer.onnx', so)
         self.input_size = (736, 736)  ###width, height
         self.short_size = 736
         self.mean = np.array([0.485, 0.456, 0.406], dtype=np.float32).reshape((1,1,3))
@@ -210,23 +210,36 @@ class TextDetector():
         return srcimg
 
     def get_rotate_crop_image(self, img, points):
-        left = int(np.min(points[:, 0]))
-        right = int(np.max(points[:, 0]))
-        top = int(np.min(points[:, 1]))
-        bottom = int(np.max(points[:, 1]))
-        img_crop = img[top:bottom + 1, left:right + 1, :]
-        points[:, 0] = points[:, 0] - left
-        points[:, 1] = points[:, 1] - top
-        img_crop_width = int(np.linalg.norm(points[0] - points[1])) + 1
-        img_crop_height = int(np.linalg.norm(points[0] - points[3])) + 1
-        pts_std = np.float32([[0, 0], [img_crop_width, 0],
-                              [img_crop_width, img_crop_height], [0, img_crop_height]])
+        img_crop_width = int(max(np.linalg.norm(points[0] - points[1]), np.linalg.norm(points[2] - points[3])))
+        img_crop_height = int(max(np.linalg.norm(points[0] - points[3]), np.linalg.norm(points[1] - points[2])))
+        pts_std = np.float32([[0, 0], [img_crop_width, 0], [img_crop_width, img_crop_height], [0, img_crop_height]])
         M = cv2.getPerspectiveTransform(points, pts_std)
-        # dst_img = cv2.warpPerspective(img_crop, M, (img_crop_width, img_crop_height))
-        dst_img = cv2.warpPerspective(img_crop, M, (img_crop_width, img_crop_height), borderMode=cv2.BORDER_REPLICATE)
-        # if dst_img.shape[0] * 1.0 / dst_img.shape[1] >= 1.5:
-        #     dst_img = np.rot90(dst_img)
+        dst_img = cv2.warpPerspective(img,
+                                      M, (img_crop_width, img_crop_height),
+                                      borderMode=cv2.BORDER_REPLICATE,
+                                      flags=cv2.INTER_CUBIC)
+        dst_img_height, dst_img_width = dst_img.shape[0:2]
+        if dst_img_height * 1.0 / dst_img_width >= 1.5:
+            dst_img = np.rot90(dst_img)
         return dst_img
+    
+        # left = int(np.min(points[:, 0]))
+        # right = int(np.max(points[:, 0]))
+        # top = int(np.min(points[:, 1]))
+        # bottom = int(np.max(points[:, 1]))
+        # img_crop = img[top:bottom + 1, left:right + 1, :]
+        # points[:, 0] = points[:, 0] - left
+        # points[:, 1] = points[:, 1] - top
+        # img_crop_width = int(np.linalg.norm(points[0] - points[1])) + 1
+        # img_crop_height = int(np.linalg.norm(points[0] - points[3])) + 1
+        # pts_std = np.float32([[0, 0], [img_crop_width, 0],
+        #                       [img_crop_width, img_crop_height], [0, img_crop_height]])
+        # M = cv2.getPerspectiveTransform(points, pts_std)
+        # # dst_img = cv2.warpPerspective(img_crop, M, (img_crop_width, img_crop_height))
+        # dst_img = cv2.warpPerspective(img_crop, M, (img_crop_width, img_crop_height), borderMode=cv2.BORDER_REPLICATE)
+        # # if dst_img.shape[0] * 1.0 / dst_img.shape[1] >= 1.5:
+        # #     dst_img = np.rot90(dst_img)
+        # return dst_img
 
     def order_points_clockwise(self, pts):
         rect = np.zeros((4, 2), dtype="float32")

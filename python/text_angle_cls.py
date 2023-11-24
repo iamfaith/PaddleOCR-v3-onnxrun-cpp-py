@@ -5,7 +5,7 @@ import numpy as np
 
 class TextClassifier:
     def __init__(self):
-        self.sess = onnxruntime.InferenceSession('weights/ch_ppocr_mobile_v2.0_cls_train.onnx')
+        self.sess = onnxruntime.InferenceSession('python/weights/ch_ppocr_mobile_v2.0_cls_train.onnx')
         self.cls_image_shape = [3, 48, 192]
         self.label_list = ['0', '180']
 

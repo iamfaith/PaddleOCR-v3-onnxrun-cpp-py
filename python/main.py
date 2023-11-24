@@ -1,3 +1,4 @@
+# %%
 import os
 import argparse
 import cv2
@@ -9,7 +10,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = 'TRUE'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--imgpath', type=str, default='images/1.jpg', help="image path")
+    parser.add_argument('--imgpath', type=str, default='python/images/2.jpg', help="image path")
     args = parser.parse_args()
 
     detect_model = TextDetector()
@@ -21,10 +22,14 @@ if __name__ == '__main__':
     box_list = detect_model.detect(srcimg)
     text = ''
     if len(box_list) > 0:
-        for point in box_list:
+        # box_list = [box_list[-3]]
+        # nox_list= [[70, 152], [687, 152], [687, 169], [70, 169]]
+        # print(box_list)
+        for i, point in enumerate(box_list):
             point = detect_model.order_points_clockwise(point)
             textimg = detect_model.get_rotate_crop_image(srcimg, point.astype(np.float32))
             angle = angle_model.predict(textimg)
+            # print(i, angle, textimg.shape, point)
             if angle=='180':
                 textimg = cv2.rotate(textimg, 1)
             text = rec_model.predict_text(textimg)
@@ -34,10 +39,11 @@ if __name__ == '__main__':
             for i in range(4):
                 cv2.circle(srcimg, tuple(point[i, :]), 3, (0, 255, 0), thickness=-1)
             print(text)
+            
 
     winName = 'Deep learning object detection in ONNXRuntime'
-    cv2.namedWindow(winName, cv2.WINDOW_NORMAL)
-    cv2.imshow(winName, srcimg)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    # cv2.imwrite('result.jpg', srcimg)
+    # cv2.namedWindow(winName, cv2.WINDOW_NORMAL)
+    # cv2.imshow(winName, srcimg)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+    cv2.imwrite('result.jpg', srcimg)
