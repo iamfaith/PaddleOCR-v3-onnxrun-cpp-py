@@ -10,7 +10,7 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = 'TRUE'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--imgpath', type=str, default='python/images/2.jpg', help="image path")
+    parser.add_argument('--imgpath', type=str, default='python/images/B5PQ23.png', help="image path")
     args = parser.parse_args()
 
     detect_model = TextDetector()
@@ -24,10 +24,14 @@ if __name__ == '__main__':
     if len(box_list) > 0:
         # box_list = [box_list[-3]]
         # nox_list= [[70, 152], [687, 152], [687, 169], [70, 169]]
-        # print(box_list)
+        print(box_list, len(box_list))
         for i, point in enumerate(box_list):
-            point = detect_model.order_points_clockwise(point)
-            textimg = detect_model.get_rotate_crop_image(srcimg, point.astype(np.float32))
+            # original
+            # point = detect_model.order_points_clockwise(point)
+            # textimg = detect_model.get_rotate_crop_image(srcimg, point.astype(np.float32))
+
+            point = np.array(point, dtype=np.float32)
+            textimg = detect_model.get_rotate_crop_image(srcimg, point)
             angle = angle_model.predict(textimg)
             # print(i, angle, textimg.shape, point)
             if angle=='180':

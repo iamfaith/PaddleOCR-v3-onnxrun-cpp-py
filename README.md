@@ -56,4 +56,13 @@ Source: Conversation with Bing, 11/24/2023
 paddle2onnx --model_dir inference_model --model_filename ppocrv3_rec.pdmodel --params_filename ppocrv3_rec.pdiparams --save_file ch_PP-OCRv3_rec.onnx --opset_version 11 --enable_onnx_checker True
 
 
- paddle2onnx --model_dir inference_model --model_filename ppocrv3_rec.pdmodel --params_filename ppocrv3_rec.pdiparams --save_file ch_PP-OCRv3_rec.onnx --opset_version 11 --enable_onnx_checker True
+ paddle2onnx --model_dir inference_model --model_filename ppocrv3_det.pdmodel --params_filename ppocrv3_det.pdiparams --save_file ppocrv3_det.onnx --opset_version 11 --enable_onnx_checker True
+
+
+'/home/faith/.paddlehub/modules/ch_pp_ocrv3_det/inference_model/ppocrv3_det.pdmodel'
+
+
+
+ hub run ch_pp-ocrv3 --input_path 'python/images/B5PQ23.png'
+
+ https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.7/doc/doc_ch/models_list.md
