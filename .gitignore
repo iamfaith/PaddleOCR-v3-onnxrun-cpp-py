@@ -1,3 +1,9 @@
 *pyc
 *jpg
 *.Identifier
+*.log
+
+*.pdmodel
+*.info
+*.pdiparams
+*.onnx
